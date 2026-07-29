@@ -20,6 +20,7 @@ To answer a security question, follow this algorithm:
 
 > [!TIP]
 > See [AGENT.md](./AGENT.md) for a copy-paste prompt that makes any AI model follow this pattern autonomously.
+> See [prompts/](./prompts/) for specialized prompts (secure code review, LLM-as-a-Judge, Security Expert Agent for multi-agent systems).
 
 # Structure
 

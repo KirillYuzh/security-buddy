@@ -15,4 +15,11 @@
 | I9: Insecure Default Settings | Security-hardened defaults out of box |
 | I10: Physical Hardening | Disable debug ports, tamper-resistant casing |
 
+## MITRE References
+- [T0813 — Exploit Automation of Device](https://attack.mitre.org/techniques/T0813/) — automated exploitation of IoT device vulnerabilities.
+- [T0821 — Device Reset](https://attack.mitre.org/techniques/T0821/) — remote device wipe or reset without authorization.
+- [T0844 — Block Command Message](https://attack.mitre.org/techniques/T0844/) — blocking firmware update commands (maps to I4: Lack of Secure Update).
+- [CAPEC-560: Hardware Analysis](https://capec.mitre.org/data/definitions/560.html) — physical attack patterns for embedded/IoT devices.
+- [CAPEC-457: USB Memory Attack](https://capec.mitre.org/data/definitions/457.html) — physical USB attack vector for IoT devices.
+
 See also: [OWASP Embedded Application Security](https://owasp.org/www-project-embedded-application-security/)

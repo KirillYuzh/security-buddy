@@ -3,6 +3,12 @@
 
 ### Core
 - [OWASP repositories](https://github.com/OWASP/)
+- [MITRE ATT&CK](https://attack.mitre.org/) — adversary tactics, techniques, and procedures (TTPs).
+- [MITRE CWE](https://cwe.mitre.org/) — Common Weakness Enumeration taxonomy.
+- [MITRE CAPEC](https://capec.mitre.org/) — Common Attack Pattern Enumeration and Classification.
+- [MITRE CVE](https://cve.mitre.org/) — Common Vulnerabilities and Exposures database.
+- [NVD (National Vulnerability Database)](https://nvd.nist.gov/) — US govt CVE repository with CVSS scores.
+- [ATT&CK Navigator](https://mitre-attack.github.io/attack-navigator/) — visualize and analyze ATT&CK coverage.
 - [OWASP Top 10](https://owasp.org/Top10/2025/A01_2025-Broken_Access_Control/)
 - [OWASP dev guide](https://devguide.owasp.org/)
 - [Secure coding practices](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/stable-en/)
@@ -102,6 +108,14 @@
 ### Blockchain & Game Security
 - [OWASP Blockchain Security Framework](https://github.com/OWASP/Blockchain-Security-Framework) — security guidance for blockchain.
 - [OWASP Game Security Framework](https://github.com/OWASP/www-project-game-security-framework) — security for gaming applications.
+
+### Cryptography & Secrets Management
+- [OWASP WrongSecrets](https://github.com/OWASP/wrongsecrets) — deliberately vulnerable app for secrets management training.
+- [WrongSecrets CTF Party](https://github.com/OWASP/wrongsecrets-ctf-party) — CTF companion for WrongSecrets.
+- [OWASP Cheat Sheet: Cryptographic Storage](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
+- [OWASP Cheat Sheet: Key Management](https://cheatsheetseries.owasp.org/cheatsheets/Key_Management_Cheat_Sheet.html)
+- [OWASP Cheat Sheet: Transport Layer Protection](https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html)
+- [OWASP Cheat Sheet: Password Storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)
 
 ### Privacy
 - [OWASP Top 10 Privacy Risks](https://owasp.org/www-project-top-10-privacy-risks/) — top privacy risks for web apps.

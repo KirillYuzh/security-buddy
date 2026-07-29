@@ -14,4 +14,10 @@ References:
 | No security gates | Define pass/fail criteria per scanning tool |
 | Drift in infrastructure config | Policy-as-code checks in CI (Conftest, OPA) |
 
+## MITRE References
+- [T1195 — Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/) — attackers targeting CI/CD pipelines as a supply chain vector.
+- [T1529 — Obtain Access to Deployment System](https://attack.mitre.org/techniques/T1529/) — compromising build/deploy infrastructure.
+- [T1608 — Stage Capabilities](https://attack.mitre.org/techniques/T1608/) — staging malicious artifacts in pipeline registries.
+- [CAPEC-437: Supply Chain Attack](https://capec.mitre.org/data/definitions/437.html) — attack pattern for pipeline compromise.
+
 See also: [OWASP Bug Logging Tool (BLT)](https://github.com/OWASP/www-project-bug-logging-tool), [OWASP Findings Format (OFF)](https://github.com/OWASP/off)

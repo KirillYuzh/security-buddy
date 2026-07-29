@@ -78,3 +78,15 @@
   * "Resource allocation, мониторинг и работа с динамическим выделением ресурсов".
   * "Ограничить или замаскировать отображение `logit_bias` и `logprobs`".
 * **Tests & Skills**: **AI Gateway & Guardrails** (enforce rate limiting). DAST: fuzz the API with large payloads.
+
+## MITRE References
+- [T1561 — Data from Pluggable Authentication Modules](https://attack.mitre.org/techniques/T1561/) — prompt injection as a new vector for credential harvesting.
+- [T1529 — Obtain Access to Device Data](https://attack.mitre.org/techniques/T1529/) — sensitive information disclosure via model output (LLM02).
+- [T1195 — Supply Chain Compromise](https://attack.mitre.org/techniques/T1195/) — compromised model weights, LoRA adapters, or RAG data (LLM03).
+- [T1574 — Hijack Execution Flow](https://attack.mitre.org/techniques/T1574/) — improper output handling leading to code execution (LLM05).
+- [T1498 — Network Denial of Service](https://attack.mitre.org/techniques/T1498/) — unbounded consumption leading to DoS/Denial of Wallet (LLM10).
+- [CAPEC-20: Formula Manipulation](https://capec.mitre.org/data/definitions/20.html) — input injection pattern akin to LLM prompt injection.
+- [CAPEC-242: Code Injection](https://capec.mitre.org/data/definitions/242.html) — model output used unsafely = code injection.
+- [CAPEC-268: Audit Log Manipulation](https://capec.mitre.org/data/definitions/268.html) — log injection via model output.
+
+See [OWASP Top 10 for LLMs](https://owasp.org/www-project-top-10-for-large-language-model-applications/) for the complete guide.

@@ -9,6 +9,13 @@
 | Unpatched production vulns | Virtual patching via [OWASP Virtual Patching Guide](https://owasp.org/www-project-virtual-patching-best-practices/) |
 | No application-level IDS | Deploy [AppSensor](https://github.com/OWASP/AppSensor-Handbook) detection points |
 
+## MITRE References
+- [T1562 — Impair Defenses](https://attack.mitre.org/techniques/T1562/) — attackers disabling logging/IDS/endpoint detection (maps to insufficient logging).
+- [T1070 — Indicator Removal on Host](https://attack.mitre.org/techniques/T1070/) — clearing logs to avoid detection.
+- [T1485 — Data Destruction](https://attack.mitre.org/techniques/T1485/) — ransomware impact; maps to Anti-Ransomware Guide.
+- [T1530 — Data from Cloud Storage](https://attack.mitre.org/techniques/T1530/) — accessing unsecured cloud buckets; requires monitoring.
+- [CAPEC-484: Data Exfiltration](https://capec.mitre.org/data/definitions/484.html) — attack pattern for extracting data; requires logging and detection.
+
 References:
 - [OWASP Security Logging](https://github.com/OWASP/www-project-security-logging)
 - [OWASP Virtual Patching Best Practices](https://owasp.org/www-project-virtual-patching-best-practices/)

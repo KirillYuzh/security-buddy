@@ -22,7 +22,7 @@ This repository is divided into folders based on their specific features:
     - [general](./infrastructure/general/) — infrastructure general
     - [microservises](./infrastructure/microservises/) — microservices security
     - [ansible](./infrastructure/ansible/) — Ansible security
-- [cryptography](./cryptography/) — cryptographic topics
+- [cryptography](./cryptography/) — cryptographic practices (WrongSecrets, O-Saft, key management, cipher choices)
 
 Each folder consists of several standard parts:
 - **general** — overview entry point for the topic

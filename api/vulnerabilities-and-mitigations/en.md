@@ -13,6 +13,13 @@ The [OWASP API Security Top 10](https://github.com/OWASP/API-Security) is the au
 - **API9:2023 — Improper Inventory Management** — decommission old API versions, document all endpoints.
 - **API10:2023 — Unsafe Consumption of APIs** — validate and sanitize data from third-party APIs.
 
+## MITRE References
+- [T1190 — Exploit Public-Facing Application](https://attack.mitre.org/techniques/T1190/) — directly maps to API1-API10. Web API vulnerabilities are a primary vector.
+- [T1552 — Unsecured Credentials](https://attack.mitre.org/techniques/T1552/) — discovering API keys in files, environment variables, and source code.
+- [T1134 — Access Token Manipulation](https://attack.mitre.org/techniques/T1134/) — jwt/oauth token theft, replay, or forgery.
+- [CAPEC-114: API Abuse](https://capec.mitre.org/data/definitions/114.html) — pattern for abusing API functionality beyond intended use.
+- [CAPEC-676: API Injection](https://capec.mitre.org/data/definitions/676.html) — injection attacks targeting API parsers.
+
 ## Tools
 - [OWASP ZAP](https://www.zaproxy.org/) — scan APIs by importing OpenAPI/SOAP/GraphQL specs.
 - [OWASP Nettacker](https://github.com/OWASP/Nettacker) — discover hidden API endpoints.

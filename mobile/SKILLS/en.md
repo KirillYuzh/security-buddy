@@ -7,4 +7,4 @@ Core competencies:
 - **Platform API Abuse** — detect dangerous WebView configurations, improper IPC.
 - **Side-loading & Tampering** — verify code signing, detect debug builds in production.
 
-Use [MobSF](https://github.com/MobSF/Mobile-Security-Framework-MobSF) for static analysis and the [MASTG](https://github.com/OWASP/mastg) for manual test cases.
+Use the [MASTG](https://github.com/OWASP/mastg) for manual test cases.

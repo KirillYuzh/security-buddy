@@ -1,0 +1,99 @@
+# Security Buddy -- CrewAI Configuration
+# Copy to config.yaml and edit
+
+# ---------------------------------------------------------------------------
+# NETWORK SECURITY & PRIVACY
+# ---------------------------------------------------------------------------
+network:
+  # Internet access control
+  # When false (default): the crew runs fully offline.
+  # The project code and report data NEVER leave the container.
+  # Only the LLM API call is made via the configured provider.
+  internet_access: false    # false = fully isolated; true = allows external calls
+  privacy_mode: true        # true = anonymize project name/paths in reports & logs
+  allowed_domains: []       # if internet_access=true, restrict outbound to these domains only
+                            # e.g. [ "api.openai.com", "api.anthropic.com" ]
+  data_egress_control: true  # true = log every outbound data transfer for audit
+
+# ---------------------------------------------------------------------------
+# REPORTING
+# ---------------------------------------------------------------------------
+reporting:
+  language: en              # en | ru — report language and LLM instruction language
+  formats:                  # select one or more output formats
+    - owasp                 # default OWASP-style markdown report
+    # - gost_r_56545        # GOST R 56545-2015 Vulnerability Passport format
+    # - gost_r_56939        # GOST R 56939-2016 Secure Development compliance report
+    # - nist_sar            # NIST SP 800-53 Security Assessment Report (SAR)
+    # - iso_27001           # ISO/IEC 27001 Annex A.14 control mapping
+  include_attack_chain: true    # include MITRE ATT&CK attack chain in report
+  include_business_impact: true # include business impact section
+
+llm:
+  provider: openai          # openai | anthropic | google | ollama | custom
+  model: gpt-4o             # model name
+  api_key: ""               # your API key or use env var LLM_API_KEY
+  api_base: ~               # optional: for custom/ollama endpoints
+  temperature: 0.1          # lower = more deterministic, higher = more creative
+  # Per-role LLM overrides (optional)
+  role_overrides:
+    developer:
+      model: gpt-4o-mini    # cheaper model for code generation
+      temperature: 0.2
+    bug_hunter:
+      model: gpt-4o         # more capable model for exploit chain analysis
+      temperature: 0.3      # slightly more creative for chaining
+
+crew:
+  max_iterations: 5         # max analysis-report-fix cycles
+  verbose: true             # detailed logging
+  knowledge_base_path: /knowledge  # security-buddy repo path in container
+  project_path: /project           # user project path in container
+  planning_enabled: true     # AgentPlanner creates task plans before each iteration
+  use_memory: true           # cross-iteration memory for context retention
+
+agents:
+  include_developer: false  # set true to add developer agent that fixes code
+  include_bug_hunter: true   # bug hunter finds exploit chains from combined findings
+  human_input_for_critical: true  # ask human approval before applying critical fixes
+  developer:
+    max_fixes_per_iteration: 10
+    commit_changes: false    # auto-commit fixes to git
+    create_pr: false         # create GitHub PR with fixes
+
+tools:
+  # External scanners to download & run on-demand
+  enabled:
+    - semgrep               # SAST — multi-language static analysis
+    # - trivy               # SCA — container, fs, config scanning
+    # - grype                # SCA — vulnerability scanning
+    # - syft                 # SBOM — CycloneDX generation
+    # - nuclei               # DAST — template-based web scanning
+    # - kubescape            # K8s — CIS/NSA security scanning
+    # - checkov              # IaC — Terraform/CloudFormation scanning
+    # - tfsec                # IaC — Terraform security
+    # - kics                 # IaC — infrastructure scanning
+    # - bearer               # SAST — data flow & secrets scanning
+  download_dir: /tools          # where scanners are cached
+  cache_ttl_hours: 168          # 7 days before re-download check
+  timeout_seconds: 600          # per-scan timeout
+
+sbom:
+  enabled: true                 # auto-generate CycloneDX SBOM
+  format: cyclonedx             # cyclonedx | spdx
+  include_dev_dependencies: false
+
+artifacts:
+  save_raw_scans: true          # preserve raw scanner output JSON
+  inject_security_todos: false  # write // TODO: security comments into source
+  todo_style: line-comment      # line-comment | block-comment
+
+output:
+  path: /output             # output directory in container
+  formats:
+    - markdown              # report.md
+    - json                  # findings.json
+    - sbom                  # sbom.json
+    - todos                 # security_todos.json
+    - prompts               # developer_prompts.md
+  log_file: logs/audit.json # structured execution log

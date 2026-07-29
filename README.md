@@ -2,25 +2,21 @@
 
 SKILLS, tests and approaches to developing secure applications.
 
-This repository is designed as a **knowledge base for AI agents and developers**. Every domain folder follows the same structure so that an AI can autonomously navigate and find relevant security guidance.
+## Quick Start
 
-## Navigation Pattern (for AI agents)
-
-To answer a security question, follow this algorithm:
-
-```
-1. Identify the domain(s) relevant to the question
-2. Read <domain>/general/en.md        → overview + context
-3. Read <domain>/SKILLS/en.md         → actionable techniques
-4. Read <domain>/vulnerabilities-and-mitigations/en.md → risks + countermeasures
-5. Read <domain>/tests/en.md          → test strategies
-6. Read <domain>/runway/en.md         → methodology + integration approach
-7. Use sources.md for official references
+```bash
+git clone git@github.com:KirillYuzh/security-buddy.git
+cd security-buddy
 ```
 
-> [!TIP]
-> See [AGENT.md](./AGENT.md) for a copy-paste prompt that makes any AI model follow this pattern autonomously.
-> See [prompts/](./prompts/) for specialized prompts (secure code review, LLM-as-a-Judge, Security Expert Agent for multi-agent systems).
+Then choose how you want to use it:
+
+| Way | What you get |
+|-----|-------------|
+| [AGENT.md](./AGENT.md) — copy-paste single prompt | Let any AI assistant (Claude, ChatGPT, Gemini, Cline) navigate the knowledge base autonomously. You just ask security questions. |
+| [prompts/](./prompts/) — specialized role prompts | Drop-in prompts for secure code review, LLM-as-a-Judge evaluation, or a Security Expert Agent for multi-agent systems (CrewAI, AutoGen, Swarm). |
+| [usage/crewai/](./usage/crewai/) — full security audit crew | Spin up a containerized team of 8 AI agents that analyze your project, generate a structured AppSec report, and optionally fix vulnerabilities iteratively. |
+| [general/reporting/](./general/reporting/) — AppSec report structure | Template for writing security reports: executive summary, findings, remediation roadmap, and examples. |
 
 # Structure
 

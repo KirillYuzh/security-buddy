@@ -120,6 +120,11 @@
 ### Privacy
 - [OWASP Top 10 Privacy Risks](https://owasp.org/www-project-top-10-privacy-risks/) — top privacy risks for web apps.
 
+### Reporting & Templates
+- [OWASP Code Review Finding Template](https://wiki.owasp.org/index.php/How_to_Write_an_Application_Code_Review_Finding) — classic single-finding structure
+- [OWASP Risk Rating Methodology](https://owasp.org/www-community/OWASP_Risk_Rating_Methodology) — calculate severity from impact and likelihood
+- [CVSS Calculator](https://www.first.org/cvss/calculator/3.1) — industry-standard scoring
+
 ### Governance & People
 - [Application Security Guide for CISOs](https://github.com/OWASP/Application-Security-Guide-For-CISOs-Project-v2) — guide for managing appsec programs.
 - [OWASP Application Security Curriculum](https://github.com/OWASP/Application-Security-Curriculum) — education framework.

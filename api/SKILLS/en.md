@@ -8,4 +8,4 @@ Core competencies for API security:
 - **Rate Limiting & Throttling** — prevent abuse and resource exhaustion.
 - **Secrets Management** — never hardcode API keys in source code.
 
-Use [OWASP ZAP](https://www.zaproxy.org/) with OpenAPI imports, [nuclei](https://github.com/projectdiscovery/nuclei) templates, and [Bruno](https://www.usebruno.com/) collections for automated testing.
+Use [OWASP ZAP](https://www.zaproxy.org/) with OpenAPI imports for automated testing.

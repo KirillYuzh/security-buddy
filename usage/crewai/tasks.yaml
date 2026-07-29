@@ -1,0 +1,148 @@
+# Task definitions for Security Buddy Crew
+
+analyze_sast:
+  description: >
+    Analyze the source code at {project_path} for security vulnerabilities.
+    Read the knowledge base at {kb_path}/general/vulnerabilities-and-mitigations/en.md
+    and relevant domain files. Identify injection flaws, broken access control,
+    XSS, insecure deserialization, and other static code weaknesses.
+    Map each finding to CWE, OWASP Top 10, and MITRE ATT&CK.
+  expected_output: >
+    A structured list of SAST findings. Each finding MUST contain:
+    - CWE identifier (e.g. CWE-79)
+    - Severity (Critical/High/Medium/Low)
+    - Exact location (file:line)
+    - Description of the vulnerability
+    - Remediation with before/after code
+    - MITRE ATT&CK technique mapping
+
+analyze_sca:
+  description: >
+    Scan project dependencies at {project_path} for known CVEs.
+    Check for lock files (package-lock.json, requirements.txt, go.sum, etc.),
+    SBOM documents, and dependency manifests. Assess supply chain risks
+    using the knowledge base at {kb_path}/supply-chain/ and 
+    {kb_path}/general/verification-standards/.
+  expected_output: >
+    A structured list of SCA findings. Each finding MUST contain:
+    - CVE identifier (e.g. CVE-2024-XXXX)
+    - Severity (Critical/High/Medium/Low)
+    - Affected dependency name and version
+    - Fixed version (if available)
+    - CVSS score vector
+    - OWASP SCVS control mapping
+
+analyze_config:
+  description: >
+    Review infrastructure configurations at {project_path}:
+    Dockerfiles, docker-compose.yml, Kubernetes manifests, CI/CD pipelines,
+    Terraform configs, and cloud provider configs. Use knowledge base at
+    {kb_path}/infrastructure/ for security best practices.
+  expected_output: >
+    A structured list of configuration findings. Each finding MUST contain:
+    - Severity (Critical/High/Medium/Low)
+    - Exact file and line
+    - Description of the misconfiguration
+    - Remediation command or config change
+    - CIS benchmark or OWASP Docker Top 10 mapping
+
+analyze_architecture:
+  description: >
+    Evaluate the project architecture at {project_path} for security design flaws.
+    Analyze data flows, trust boundaries, authentication/authorization models,
+    and threat surface. Use knowledge base at {kb_path}/threat-modeling/ and
+    {kb_path}/general/ for threat modeling guidance.
+  expected_output: >
+    A structured list of architectural findings. Each finding MUST contain:
+    - Severity (Critical/High/Medium/Low)
+    - Affected component or data flow
+    - Description of the design flaw
+    - Attack scenario with STRIDE category
+    - Recommended architecture change
+    - MITRE ATT&CK tactic mapping
+
+analyze_ai_ml:
+  description: >
+    Analyze LLM/ML code at {project_path} for OWASP LLM Top 10 vulnerabilities:
+    prompt injection, sensitive information disclosure, supply chain,
+    improper output handling, excessive agency, and denial of wallet.
+    Use knowledge base at {kb_path}/ai-based/.
+    Only activate if the project contains AI/ML code, LLM integrations,
+    or agent frameworks.
+  expected_output: >
+    A structured list of AI/ML findings. Each finding MUST contain:
+    - OWASP LLM Top 10 category (LLM01-LLM10)
+    - Severity (Critical/High/Medium/Low)
+    - Location in code
+    - Description of the vulnerability
+    - Remediation approach
+    - MITRE ATT&CK mapping
+
+analyze_crypto:
+  description: >
+    Review cryptographic implementations at {project_path}:
+    encryption algorithms, key management, TLS configuration,
+    password hashing, and certificate handling. Use knowledge base at
+    {kb_path}/cryptography/.
+  expected_output: >
+    A structured list of cryptography findings. Each finding MUST contain:
+    - CWE identifier (e.g. CWE-321, CWE-326, CWE-327, CWE-916)
+    - Severity (Critical/High/Medium/Low)
+    - Exact location
+    - Description of the cryptographic weakness
+    - Replacement algorithm or configuration
+    - OWASP Cheat Sheet reference
+
+hunt_exploit_chains:
+  description: >
+    Review the combined findings from SAST, SCA, Config, Architecture,
+    AI/ML, and Crypto analysts. Identify exploitable vulnerability chains
+    that could lead to data breach, RCE, privilege escalation, or
+    lateral movement. Look for combinations of low/medium severity issues
+    that, when chained, become critical. Use knowledge base at
+    {kb_path} for attack patterns and real-world exploits.
+  expected_output: >
+    A structured list of exploit chains. Each chain MUST contain:
+    - Chain ID (e.g. CHAIN-001)
+    - Overall severity (Critical/High)
+    - Step-by-step attack path linking individual findings
+    - Technical impact of the full chain
+    - Business impact
+    - MITRE ATT&CK technique sequence
+    - Recommended chain-breaking fix
+
+generate_report:
+  description: >
+    Compile ALL findings from analyst agents into a comprehensive,
+    structured AppSec report. Use the knowledge base at {kb_path}/general/
+    and {kb_path}/tools/ for reporting guidance. The report must follow
+    the standard structure:
+    1. Introduction (version control, team, scope, limitations)
+    2. Executive Summary (overall score, key risks, strategic recommendations)
+    3. Methodology (standards, tools, techniques)
+    4. Detailed Findings (each with CWE, severity, location, remediation)
+    5. Exploit Chains (from bug hunter)
+    6. Remediation Roadmap (by priority)
+    7. Appendices (compliance checklist, references)
+    Translate technical risks into business impact.
+    Generate developer prompts for each fix.
+  expected_output: >
+    A complete security audit report in the specified output format.
+    The report MUST include all findings from all analysts, exploit chains,
+    severity distribution, risk score, and actionable remediation steps.
+
+fix_vulnerabilities:
+  description: >
+    Fix the vulnerabilities identified in the report at {report_path}
+    using developer prompts at {prompts_path}. Apply secure coding patterns
+    from the knowledge base at {kb_path}/domain/SKILLS/ and
+    {kb_path}/domain/vulnerabilities-and-mitigations/.
+    Produce diffs for each fix. Verify fixes don't introduce new issues.
+    Log all changes to the remediation log.
+  expected_output: >
+    A summary of all applied fixes, including:
+    - Each finding ID that was fixed
+    - File and lines changed
+    - Before/after diff
+    - Verification that no new vulnerabilities were introduced
+    - Remaining unfixed findings with justification

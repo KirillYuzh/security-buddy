@@ -1,16 +1,4 @@
-# WAF & ModSecurity Tests
-
-| Check | Tool/Method |
-| :--- | :--- |
-| CRS regression tests | `crs-toolchain`, `go-ftw` |
-| WAF bypass testing | `wafw00f`, manual encoding fuzzing |
-| AppSensor detection | Deploy detection points, verify alerts |
-| Security headers | [securityheaders.com](https://securityheaders.com/), CLI scan |
-</content>
-</｜｜DSML｜｜_file>
-<write_to_file>
-<path>infrastructure/waf-modsecurity/runway/en.md</path>
-<content># WAF & ModSecurity Runway
+# WAF & ModSecurity Runway
 
 1. **Deploy in blocking mode only after tuning** — start with log-only mode, tune CRS exclusions, then enable blocking.
 2. **Monitor bypass attempts** — track blocked vs. allowed suspicious requests; adjust rules.

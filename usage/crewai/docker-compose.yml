@@ -1,0 +1,33 @@
+services:
+  security-audit:
+    build: .
+    container_name: security-buddy-audit
+    volumes:
+      # Mount the user's project to be analyzed (read-only for safety)
+      - "${PROJECT_PATH:-./test-project}:/project:ro"
+      # Mount the security-buddy knowledge base (read-only)
+      - "${KNOWLEDGE_PATH:-../../}:/knowledge:ro"
+      # Output directory
+      - "${OUTPUT_PATH:-./output}:/output"
+    environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - LLM_MODEL=${LLM_MODEL:-gpt-4o}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_API_BASE=${LLM_API_BASE:-}
+      - MAX_ITERATIONS=${MAX_ITERATIONS:-5}
+      - INCLUDE_DEVELOPER=${INCLUDE_DEVELOPER:-false}
+      - VERBOSE=${VERBOSE:-true}
+      # Network & Privacy
+      - INTERNET_ACCESS=${INTERNET_ACCESS:-false} # false = fully offline, only LLM API
+      - PRIVACY_MODE=${PRIVACY_MODE:-true} # true = anonymize paths in reports
+      # Reporting
+      - REPORT_LANGUAGE=${REPORT_LANGUAGE:-en} # en | ru
+    stdin_open: true
+    tty: true
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 1G

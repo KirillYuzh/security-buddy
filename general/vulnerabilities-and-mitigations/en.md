@@ -1,80 +1,22 @@
+# Vulnerabilities & Mitifations
 
-### **LLM01: Prompt Injection**
-* **Risk**: Attacker manipulates the model by inputting hidden instructions, overriding system prompts. "Direct" (user input) and "Indirect" (files, parsing...) .
-* **Mitigation (from notes)**:
-  * "Чёткие рамки работы (указание роли и обязанностей в системном промпте)".
-  * "Отображение правил оценки (внутренняя логика, лимиты, ключевые слов...)".
-  * "Использовать guardrails вне самой LLM. Наличие правил в системном промпте не гарантия их выполнения."
-* **Tests & Skills**: **Adversarial Red Teaming** (use `garak` or `deepeval` to test for injection), **AI Gateway & Guardrails** (runtime checks). Pre-commit: flag dangerous `eval()` or `exec()` of user input.
+Firstly, make sure that you understand all common vulnerabilities - read [OWASP Top 10](https://owasp.org/Top10/2025/).
 
-### **LLM02: Sensitive Information Disclosure**
-* **Risk**: Model leaks PII, credentials, or proprietary data in its output. "Неавторизованный доступ к информации" .
-* **Mitigation (from notes)**:
-  * "Отделение чувствительной информации так, чтобы модель не имела к ним доступа, вынесение из системного промпта".
-  * "Маскирование чувствительных данных при обучении".
-  * "Использовать RBAC для ограничения неавторизованного доступа".
-* **Tests & Skills**: **AI Gateway & Guardrails** (output redaction for PII). DAST: send prompts designed to extract hidden data.
+# CVE, CWE
 
-### **LLM03: Supply Chain**
-* **Risk**: Compromised third-party packages, model weights, or data sources lead to vulnerabilities.
-* **Mitigation (from notes)**:
-  * "Инвентаризация через генерацию AI/ML BOM файлов" (e.g., OWASP AI BOM).
-  * "Постоянные проверки на наличие спрятанного кода... добавлять данные только из проверенных источников".
-  * "Коллаборация и проверка LoRA адаптеров" (Colluding LoRA adapters).
-* **Tests & Skills**: **SCA** (`trivy`), **Data & Supply Chain Hygiene** (monitor DVC, check provenance). Pre-commit: pin dependencies to specific hashes.
+**CVE** (Common Vulnerabilities and Exposures) is a dictionary of publicly disclosed cybersecurity vulnerabilities. Each CVE entry has a unique identifier in the format `CVE-YYYY-NNNNN`. Think of it as a specific "incident report" for a known flaw. You can search CVEs at [cve.mitre.org](https://cve.mitre.org/) or via the [NVD (National Vulnerability Database)](https://nvd.nist.gov/).
 
-### **LLM04: Data and Model Poisoning**
-* **Risk**: Adversaries corrupt training/fine-tuning data to create a backdoor (e.g., a ROME-based attack).
-* **Mitigation (from notes)**:
-  * "Валидация данных перед добавлением в RAG".
-  * "Децентрализованное обучение моделей на разных серверах и датасетах".
-  * "Proof Pudding attack" (requires defenses against subtle poisoning).
-* **Tests & Skills**: **MLOps & Observability** (track training data lineage, evals for drift). **Adversarial Red Teaming** (probe for backdoor triggers).
+**CWE** (Common Weakness Enumeration) is a taxonomy of common software and hardware weakness types. Each CWE entry has a unique identifier like `CWE-79` (Cross-Site Scripting). Think of it as a "category" or "class" of vulnerability. OWASP Top 10 entries map directly to CWEs. Explore the full list at [cwe.mitre.org](https://cwe.mitre.org/).
 
-### **LLM05: Improper Output Handling**
-* **Risk**: LLM output is used unsafely, leading to XSS, RCE, or SSRF. "Некорректный/предвзятый ответ". .
-* **Mitigation (from notes)**:
-  * "Санитайзинг, ASVS".
-  * "Фильтрация и санитайзинг ввода/вывода".
-  * "Валидация ответа".
-* **Tests & Skills**: **SAST** (`semgrep`) scans for output used in DOM sinks, shell commands, or SQL queries. Pre-commit is critical here.
+The relationship is simple: a **CWE** is the *type* of weakness, and a **CVE** is a *specific instance* of that weakness found in a real product. For example, `CVE-2023-44487` (HTTP/2 Rapid Reset attack) is an instance of the weakness class `CWE-770` (Allocation of Resources Without Limits or Throttling).
 
-### **LLM06: Excessive Agency**
-* **Risk**: The LLM agent has too many permissions, allowing it to perform unintended harmful actions (e.g., delete data).
-* **Mitigation (from notes)**:
-  * "Политика минимальных привилегий для агентов, постоянный пересмотр прав".
-  * "Проверка tools/plugins на отсутствие ненужного функционала (update/delete/message sending/crawling...)".
-  * "Human-in-the-loop для важных действий".
-* **Tests & Skills**: **Agent Security** (design principle). Pre-commit: scan for agent definitions that use dangerous tools. Runtime: enforce authorization checks.
+When assessing a finding in your reports:
+1. Identify the **CWE** class (gives you the category of the issue).
+2. Locate the matching **CVE** if one exists (tells you if there's a known exploit in the wild).
+3. Use OWASP references to understand the mitigation.
 
-### **LLM07: System Prompt Leakage**
-* **Risk**: The system prompt is extracted via a jailbreak or error message. "Раскрытие информации об архитектуре/системном промпте".
-* **Mitigation (from notes)**:
-  * "Отображение роли пользователя или других существующих ролей внутри системы".
-  * "Вынесение разделения доступа... использовать несколько моделей... с минимальными привилегиями".
-  * "Максимальное вынесение проверок из системного промпта в окружение модели".
-* **Tests & Skills**: **Adversarial Red Teaming** (attempt to extract system prompt), **AI Gateway** (canary token detection).
+Useful references:
+- [OWASP CWE page](https://owasp.org/www-community/OWASP_CWE_Matrix)
+- [NVD Search](https://nvd.nist.gov/)
+- [CVE.org](https://www.cve.org/)
 
-### **LLM08: Vector & Embedding Weaknesses**
-* **Risk**: Attacks on the RAG pipeline, like embedding inversion or cross-context conflict. "Кросс-контекстные утечки и конфликты в федеративных знаниях". .
-* **Mitigation (from notes)**:
-  * "DB партиционирование на основе прав текущей роли через явную логику".
-  * "Проверки при объединении данных (на конфликты, аудит...)".
-  * "Glitch token filtering перед добавлением в контекстное окно".
-* **Tests & Skills**: **Data & Supply Chain Hygiene**. DAST: test if RAG retrieves cross-tenant data. **Adversarial Red Teaming**: test for embedding inversion.
-
-### **LLM09: Misinformation**
-* **Risk**: LLM gives incorrect/false info, leading to user harm. "Пользователь основывает своё решение на неверном ответе".
-* **Mitigation (from notes)**:
-  * "Добавить проверку фактов и регулярный пересмотр данных человеком".
-  * "Использовать RAG как базу знаний для ответов".
-  * "Предупреждать пользователя о возможной неточности ответов".
-* **Tests & Skills**: **LLM-Specific Evals** (hallucination score). **AI Gateway** (grounding checks). **MLOps & Observability** (monitor model drift on evals).
-
-### **LLM10: Unbounded Consumption**
-* **Risk**: DoS or Denial of Wallet due to excessive token usage, loops, or large requests. "Экономические потери (избыточно потраченные ресурсы)" .
-* **Mitigation (from notes)**:
-  * "Rate-limiting для использования модели".
-  * "Resource allocation, мониторинг и работа с динамическим выделением ресурсов".
-  * "Ограничить или замаскировать отображение `logit_bias` и `logprobs`".
-* **Tests & Skills**: **AI Gateway & Guardrails** (enforce rate limiting). DAST: fuzz the API with large payloads.

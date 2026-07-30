@@ -1,0 +1,39 @@
+# Security Buddy -- CrewAI Configuration
+# Упрощённо: только code review
+
+llm:
+  provider: custom
+  model: test-combo
+  api_key: sk-6dc147bac3e5706a-9120d9-ce55c298
+  api_base: http://host.docker.internal:20128/v1
+  temperature: 0.1
+
+crew:
+  max_iterations: 3
+  verbose: true
+  planning_enabled: false
+  use_memory: false
+  project_path: /project
+  knowledge_base_path: /knowledge
+
+agents:
+  include_developer: false
+  include_bug_hunter: false
+
+tools:
+  download_dir: /tools
+  cache_ttl_hours: 168
+
+output:
+  path: /output
+  formats:
+    - markdown
+    - json
+  log_file: logs/audit.json
+
+reporting:
+  language: ru
+  formats:
+    - owasp
+  include_attack_chain: false
+  include_business_impact: true

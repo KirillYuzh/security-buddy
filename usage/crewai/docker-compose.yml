@@ -2,18 +2,23 @@ services:
   security-audit:
     build: .
     container_name: security-buddy-audit
+    network_mode: "bridge"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       # Mount the user's project to be analyzed (read-only for safety)
-      - "${PROJECT_PATH:-./test-project}:/project:ro"
+      - "${PROJECT_PATH:?PROJECT_PATH is required}:/project:ro"
       # Mount the security-buddy knowledge base (read-only)
       - "${KNOWLEDGE_PATH:-../../}:/knowledge:ro"
       # Output directory
       - "${OUTPUT_PATH:-./output}:/output"
     environment:
+      - CREWAI_TOOLS_ALLOW_UNSAFE_PATHS=true
+      - OPENAI_API_KEY=${LLM_API_KEY:-} # CrewAI/LiteLLM requires this env var
       - LLM_PROVIDER=${LLM_PROVIDER:-openai}
       - LLM_MODEL=${LLM_MODEL:-gpt-4o}
       - LLM_API_KEY=${LLM_API_KEY:-}
-      - LLM_API_BASE=${LLM_API_BASE:-}
+      - LLM_API_BASE=${LLM_API_BASE:-http://host.docker.internal:11434}
       - MAX_ITERATIONS=${MAX_ITERATIONS:-5}
       - INCLUDE_DEVELOPER=${INCLUDE_DEVELOPER:-false}
       - VERBOSE=${VERBOSE:-true}

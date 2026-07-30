@@ -1,12 +1,33 @@
 # Task definitions for Security Buddy Crew
 
+# ---------------------------------------------------------------------------
+# Phase 1: Parallel Analysis Tasks
+# ---------------------------------------------------------------------------
+
 analyze_sast:
   description: >
-    Analyze the source code at {project_path} for security vulnerabilities.
-    Read the knowledge base at {kb_path}/general/vulnerabilities-and-mitigations/en.md
-    and relevant domain files. Identify injection flaws, broken access control,
-    XSS, insecure deserialization, and other static code weaknesses.
-    Map each finding to CWE, OWASP Top 10, and MITRE ATT&CK.
+    Analyze the source code at /project for security vulnerabilities.
+    Read the knowledge base at /knowledge/general/vulnerabilities-and-mitigations/en.md.
+    
+    CRITICAL PATH RULES:
+    - The project root is ALWAYS "/project" — use this exact absolute path.
+    - Do NOT use placeholders like [PROJECT_ROOT] or [PROJECT] — they do not exist.
+    - Do NOT use relative paths like "app/" or "./app" — always use "/project/app/".
+    - When listing a directory, pass the exact absolute path: "/project", "/project/src", etc.
+    - When reading a file, pass the exact absolute path: "/project/src/main.py", etc.
+    - Do NOT append ":1" or any line numbers to file paths — the tool reads the whole file.
+    
+    IMPORTANT WORKFLOW:
+    1. First, use list_directory to explore "/project" recursively — list all
+       subdirectories and files to understand the project structure.
+    2. Then, use read_a_files_content to read each source code file (.py, .js, .java,
+       .yaml, .json, .ts, .go, .c, .cpp, .rb, .php, etc.) to find vulnerabilities.
+    3. Identify injection flaws, broken access control, XSS, insecure deserialization,
+       and other static code weaknesses.
+    4. Map each finding to CWE, OWASP Top 10, and MITRE ATT&CK.
+    
+    IMPORTANT: To list files in a directory, read the directory path (e.g. "/project")
+    with your list_tool or read_tool — the tool returns a directory listing as text.
   expected_output: >
     A structured list of SAST findings. Each finding MUST contain:
     - CWE identifier (e.g. CWE-79)
@@ -18,131 +39,149 @@ analyze_sast:
 
 analyze_sca:
   description: >
-    Scan project dependencies at {project_path} for known CVEs.
-    Check for lock files (package-lock.json, requirements.txt, go.sum, etc.),
-    SBOM documents, and dependency manifests. Assess supply chain risks
-    using the knowledge base at {kb_path}/supply-chain/ and 
-    {kb_path}/general/verification-standards/.
+    Analyze the project dependencies at {project_path} for known vulnerabilities (CVEs).
+    Read the knowledge base at {kb_path}/supply-chain/vulnerabilities-and-mitigations/en.md.
+    
+    IMPORTANT WORKFLOW:
+    1. Use list_directory to explore {project_path} recursively.
+    2. Use read_a_files_content to read dependency files (requirements.txt, package.json,
+       pom.xml, build.gradle, go.mod, Cargo.toml, etc.).
+    3. Identify outdated or vulnerable dependencies and map to CVE IDs.
+    4. Suggest safe versions for remediation.
   expected_output: >
     A structured list of SCA findings. Each finding MUST contain:
     - CVE identifier (e.g. CVE-2024-XXXX)
     - Severity (Critical/High/Medium/Low)
-    - Affected dependency name and version
-    - Fixed version (if available)
-    - CVSS score vector
-    - OWASP SCVS control mapping
+    - Affected component and version
+    - Fixed version recommendation
+    - Description of the vulnerability
 
 analyze_config:
   description: >
-    Review infrastructure configurations at {project_path}:
-    Dockerfiles, docker-compose.yml, Kubernetes manifests, CI/CD pipelines,
-    Terraform configs, and cloud provider configs. Use knowledge base at
-    {kb_path}/infrastructure/ for security best practices.
+    Analyze configuration files at {project_path} for security misconfigurations.
+    Read the knowledge base at {kb_path}/infrastructure/container-cloud-security/vulnerabilities-and-mitigations/en.md.
+    
+    IMPORTANT WORKFLOW:
+    1. Use list_directory to explore {project_path} recursively.
+    2. Use read_a_files_content to read config files (Dockerfile, docker-compose.yml,
+       .env, .yaml, .yml, .toml, CI/CD configs, etc.).
+    3. Identify exposed secrets, overly permissive settings, missing security headers,
+       and insecure defaults.
   expected_output: >
     A structured list of configuration findings. Each finding MUST contain:
+    - CWE identifier (e.g. CWE-200)
     - Severity (Critical/High/Medium/Low)
-    - Exact file and line
+    - Exact file and line number
     - Description of the misconfiguration
-    - Remediation command or config change
-    - CIS benchmark or OWASP Docker Top 10 mapping
+    - Remediation steps
 
 analyze_architecture:
   description: >
-    Evaluate the project architecture at {project_path} for security design flaws.
-    Analyze data flows, trust boundaries, authentication/authorization models,
-    and threat surface. Use knowledge base at {kb_path}/threat-modeling/ and
-    {kb_path}/general/ for threat modeling guidance.
+    Review the application architecture at {project_path} for security design flaws.
+    Read the knowledge base at {kb_path}/threat-modeling/vulnerabilities-and-mitigations/en.md.
+    
+    IMPORTANT WORKFLOW:
+    1. Use list_directory to explore {project_path} recursively.
+    2. Use read_a_files_content to read source code files to understand the architecture.
+    3. Analyze data flow, trust boundaries, authentication/authorization models,
+       and session management.
+    4. Apply STRIDE threat modeling methodology.
   expected_output: >
-    A structured list of architectural findings. Each finding MUST contain:
+    A structured list of architecture findings. Each finding MUST contain:
+    - STRIDE category (Spoofing/Tampering/Repudiation/Info Disclosure/DoS/Elevation)
     - Severity (Critical/High/Medium/Low)
-    - Affected component or data flow
+    - Component name
     - Description of the design flaw
-    - Attack scenario with STRIDE category
-    - Recommended architecture change
-    - MITRE ATT&CK tactic mapping
+    - Recommended architectural change
 
 analyze_ai_ml:
   description: >
-    Analyze LLM/ML code at {project_path} for OWASP LLM Top 10 vulnerabilities:
-    prompt injection, sensitive information disclosure, supply chain,
-    improper output handling, excessive agency, and denial of wallet.
-    Use knowledge base at {kb_path}/ai-based/.
-    Only activate if the project contains AI/ML code, LLM integrations,
-    or agent frameworks.
+    Analyze AI/ML related code at {project_path} for OWASP LLM Top 10 vulnerabilities.
+    Read the knowledge base at {kb_path}/ai-based/vulnerabilities-and-mitigations/en.md.
+    
+    IMPORTANT WORKFLOW:
+    1. Use list_directory to explore {project_path} recursively.
+    2. Use read_a_files_content to read AI/ML related files.
+    3. Identify prompt injection, training data poisoning, model theft,
+       sensitive information disclosure, and insecure output handling.
   expected_output: >
     A structured list of AI/ML findings. Each finding MUST contain:
-    - OWASP LLM Top 10 category (LLM01-LLM10)
+    - OWASP LLM category (LLM01-LLM10)
     - Severity (Critical/High/Medium/Low)
     - Location in code
     - Description of the vulnerability
-    - Remediation approach
-    - MITRE ATT&CK mapping
+    - Remediation steps
 
 analyze_crypto:
   description: >
-    Review cryptographic implementations at {project_path}:
-    encryption algorithms, key management, TLS configuration,
-    password hashing, and certificate handling. Use knowledge base at
-    {kb_path}/cryptography/.
+    Analyze cryptographic implementations at {project_path} for weaknesses.
+    Read the knowledge base at {kb_path}/cryptography/vulnerabilities-and-mitigations/en.md.
+    
+    IMPORTANT WORKFLOW:
+    1. Use list_directory to explore {project_path} recursively.
+    2. Use read_a_files_content to read source code files.
+    3. Identify weak algorithms (MD5, SHA1, DES, RC4), improper key management,
+       hardcoded secrets, insecure random number generators, and improper TLS configs.
   expected_output: >
     A structured list of cryptography findings. Each finding MUST contain:
-    - CWE identifier (e.g. CWE-321, CWE-326, CWE-327, CWE-916)
+    - CWE identifier (e.g. CWE-327)
     - Severity (Critical/High/Medium/Low)
-    - Exact location
-    - Description of the cryptographic weakness
-    - Replacement algorithm or configuration
-    - OWASP Cheat Sheet reference
+    - Exact file and line number
+    - Description of the weakness
+    - Recommended algorithm or approach
+
+# ---------------------------------------------------------------------------
+# Phase 2: Bug Hunter Task
+# ---------------------------------------------------------------------------
 
 hunt_exploit_chains:
   description: >
-    Review the combined findings from SAST, SCA, Config, Architecture,
-    AI/ML, and Crypto analysts. Identify exploitable vulnerability chains
-    that could lead to data breach, RCE, privilege escalation, or
-    lateral movement. Look for combinations of low/medium severity issues
-    that, when chained, become critical. Use knowledge base at
-    {kb_path} for attack patterns and real-world exploits.
+    Review all findings from the parallel analysis phase and identify exploit chains.
+    An exploit chain is a sequence of low/medium severity issues that combine into
+    a critical attack path. For each chain, describe the step-by-step attack path,
+    technical and business impact, and provide a chain-breaking fix.
   expected_output: >
     A structured list of exploit chains. Each chain MUST contain:
-    - Chain ID (e.g. CHAIN-001)
-    - Overall severity (Critical/High)
-    - Step-by-step attack path linking individual findings
-    - Technical impact of the full chain
+    - Chain ID (CHAIN-001, CHAIN-002, etc.)
+    - Severity (Critical/High)
+    - Step-by-step attack path
+    - Technical impact
     - Business impact
-    - MITRE ATT&CK technique sequence
-    - Recommended chain-breaking fix
+    - Chain-breaking fix
+
+# ---------------------------------------------------------------------------
+# Phase 3: Report Generation Task
+# ---------------------------------------------------------------------------
 
 generate_report:
   description: >
-    Compile ALL findings from analyst agents into a comprehensive,
-    structured AppSec report. Use the knowledge base at {kb_path}/general/
-    and {kb_path}/tools/ for reporting guidance. The report must follow
-    the standard structure:
-    1. Introduction (version control, team, scope, limitations)
-    2. Executive Summary (overall score, key risks, strategic recommendations)
-    3. Methodology (standards, tools, techniques)
-    4. Detailed Findings (each with CWE, severity, location, remediation)
-    5. Exploit Chains (from bug hunter)
-    6. Remediation Roadmap (by priority)
-    7. Appendices (compliance checklist, references)
-    Translate technical risks into business impact.
-    Generate developer prompts for each fix.
+    Compile all findings and exploit chains into a comprehensive AppSec report.
+    Read the knowledge base at {kb_path}/general/reporting/en.md for reporting guidelines.
+    Include executive summary, methodology, detailed findings, business impact,
+    and prioritized remediation roadmap.
   expected_output: >
-    A complete security audit report in the specified output format.
-    The report MUST include all findings from all analysts, exploit chains,
-    severity distribution, risk score, and actionable remediation steps.
+    A complete security audit report in markdown format with:
+    - Executive summary
+    - Methodology
+    - Detailed findings with CWE/severity/location/remediation
+    - Business impact analysis
+    - Prioritized remediation roadmap
+
+# ---------------------------------------------------------------------------
+# Phase 4: Fix Task (optional)
+# ---------------------------------------------------------------------------
 
 fix_vulnerabilities:
   description: >
-    Fix the vulnerabilities identified in the report at {report_path}
-    using developer prompts at {prompts_path}. Apply secure coding patterns
-    from the knowledge base at {kb_path}/domain/SKILLS/ and
-    {kb_path}/domain/vulnerabilities-and-mitigations/.
-    Produce diffs for each fix. Verify fixes don't introduce new issues.
-    Log all changes to the remediation log.
+    Apply security fixes to the source code at {project_path} based on the
+    findings report at {report_path} and developer prompts at {prompts_path}.
+    Read the knowledge base at {kb_path} for secure coding guidance.
+    For each finding, implement the remediation and generate a diff.
+    Do NOT introduce dangerous patterns (eval(), chmod 777, hardcoded secrets).
   expected_output: >
-    A summary of all applied fixes, including:
-    - Each finding ID that was fixed
-    - File and lines changed
-    - Before/after diff
-    - Verification that no new vulnerabilities were introduced
-    - Remaining unfixed findings with justification
+    A list of applied fixes. Each fix MUST contain:
+    - Finding ID
+    - Whether the fix was applied
+    - File changed and lines changed
+    - Diff (before/after)
+    - Verification status

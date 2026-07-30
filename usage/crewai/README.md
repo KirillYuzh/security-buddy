@@ -76,8 +76,8 @@ reporting:
   language: en              # en | ru -- report language
   formats:
     - owasp                 # default OWASP-style markdown
-    # - gost_r_56545        # GOST R 56545-2015 Vulnerability Passport
-    # - gost_r_56939        # GOST R 56939-2016 Secure Development
+    # - gost_r_56545        # ГОСТ Р 56545-2015 Vulnerability Passport
+    # - gost_r_56939        # ГОСТ Р 56939-2016 Secure Development
     # - nist_sar            # NIST SP 800-53 SAR with POA&M
     # - iso_27001           # ISO/IEC 27001 Annex A.14 mapping
   include_attack_chain: true
@@ -474,3 +474,4 @@ LLM_PROVIDER=anthropic LLM_MODEL=claude-sonnet-4-20250514 \
 LLM_PROVIDER=ollama LLM_MODEL=llama3.3:70b \
   LLM_API_BASE=http://host.docker.internal:11434 \
   docker compose up --build
+```
